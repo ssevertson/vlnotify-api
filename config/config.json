@@ -1,0 +1,132 @@
+{
+  "app": {
+    "name": "***AppName***",
+    "domain": "{app.name}.com",
+    "hosts": [
+      "localhost",
+      "::1"
+    ],
+    "port": 8080
+  },
+  "resourceful": {
+    "engine": "Couchdb",
+    "host": "{app.name}.iriscouch.com",
+    "port": 443,
+    "database": "{app.name}",
+    "secure": true,
+    "auth": {
+      "username": "{app.name}-api",
+      "password": "***Password***"
+    }
+  },
+  "log": {
+    "console": {
+      "timestamp": true,
+      "colorize": true
+    },
+    "loggly": {
+      "subdomain": "{app.name}",
+      "inputToken": "***InputToken***",
+      "json": true
+    }
+  },
+  "cors": {
+    "origins": ["https://{domain}"],
+    "methods": ["HEAD", "GET", "POST", "PUT", "DELETE"],
+    "credentials": true
+  },
+  "aws": {
+    "config": {
+      "accessKeyId": "***AccessKeyId***",
+      "secretAccessKey": "***SecretAccessKey***",
+      "region": "us-east-1",
+      "sslEnabled": true,
+      "maxRetries": 1
+    },
+    "s3": {
+      "buckets": {
+        "data": {
+          "Bucket": "{app.name}-data",
+          "ACL": "public-read"
+        }
+      },
+      "cors": {
+        "data": {
+          "Bucket": "{app.name}-data",
+          "CORSConfiguration": {
+            "CORSRules": [
+              {
+                "AllowedMethods": ["GET"],
+                "AllowedOrigins": ["{app.domain}"],
+                "AllowedHeaders": ["*"],
+                "MaxAgeSeconds": 86400
+              }
+            ]
+          }
+        }
+      }
+    },
+    "cloudfront": {
+      "distributions": {
+        "data": {
+          "DistributionConfig": {
+            "Aliases": {
+              "Quantity": 0,
+              "Items": []
+            },
+            "DefaultRootObject": "",
+            "Origins": {
+              "Quantity": 1,
+              "Items": [
+                {
+                  "Id": "S3-{app.name}-data",
+                  "DomainName": "{app.name}-data.s3.amazonaws.com",
+                  "S3OriginConfig": {
+                    "OriginAccessIdentity": ""
+                  }
+                }
+              ]
+            },
+            "DefaultCacheBehavior": {
+              "TargetOriginId": "S3-{app.name}-data",
+              "ForwardedValues": {
+                "QueryString": false
+              },
+              "TrustedSigners": {
+                "Enabled": false,
+                "Quantity": 0,
+                "Items": []
+              },
+              "ViewerProtocolPolicy": "https-only",
+              "MinTTL": 3600
+            },
+            "CacheBehaviors": {
+              "Quantity": 0,
+              "Items": []
+            },
+            "Comment": "Data Distribution",
+            "Logging": {
+              "Enabled": false,
+              "Bucket": "",
+              "Prefix": ""
+            },
+            "Enabled": true
+          }
+        }
+      }
+    }
+  },
+  "indextank": {
+    "config": {
+      "url": "***IndexTankUrl***",
+      "user": "ignored",
+      "pass": "***Password***"
+    },
+    "indexes": {
+      "data": {
+        "index": "{app.name}_data",
+        "public_search": true
+      }
+    }
+  }
+}
