@@ -14,4 +14,4 @@ Configuration
   `resourceful_auth_password='your password'`
 
 3. Command-line arguments: use the variable's JSON path, separated by the '.' character. For example,
-  '--resourcefl.auth.password='your password'
+  `--resourceful.auth.password='your password'`
