@@ -7,7 +7,7 @@
     "flatiron": "https://github.com/ssevertson/flatiron/tarball/master",
     "restful": "~0.4.4",
     "utile": "~0.2.0",
-    "winston": "~0.7.1",
+    "winston": "https://github.com/flatiron/winston/tarball/master",
     "winston-loggly": "~0.6.0",
     "connect": "~2.7.9",
     "connect-xcors": "~0.5.2",
