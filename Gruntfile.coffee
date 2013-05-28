@@ -28,18 +28,20 @@ module.exports = (grunt) ->
         dest: 'app/'
 
     mochacov:
-      coverage:
-        options:
-          coveralls:
-            serviceName: 'travis-ci'
-            repoToken: process.env.COVERALLS_REPO_TOKEN
       options:
         timeout: 10000
         ui: 'bdd'
         reporter: 'spec'
         compilers: ['coffee:coffee-script']
-        coverage: true
-      all: ['test/**/*.coffee']
+      test:
+        src: ['test/**/*.coffee']
+      coverage:
+        src: ['test/**/*.coffee']
+        options:
+          coveralls:
+            serviceName: 'travis-ci'
+            repoToken: process.env.COVERALLS_REPO_TOKEN
+        
 
     watch:
       files: [
@@ -72,6 +74,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-copy'
   
   grunt.registerTask 'compile', ['coffee', 'coffeelint', 'copy']
-  grunt.registerTask 'test', ['compile', 'mochacov']
+  grunt.registerTask 'test', ['compile', 'mochacov:test']
+  grunt.registerTask 'ci', ['compile', 'mochacov:coverage']
   grunt.registerTask 'develop', ['concurrent']
-  grunt.registerTask 'default', ['compile', 'test']
+  grunt.registerTask 'default', ['test']
