@@ -25,6 +25,7 @@
     "tea-type": "~0.1.0"
   },
   "devDependencies": {
+    "coffee-script": "~1.6.2",
     "mocha": "~1.9.0",
     "chai": "~1.6.0",
     "nodemon": "~0.7.8",
@@ -39,10 +40,11 @@
     "request": "~2.21.0",
     "sinon": "~1.7.2",
     "sinon-chai": "~2.4.0",
-    "blanket": "~1.1.4"
+    "blanket": "~1.1.4",
+    "mocha-lcov-reporter": "0.0.1"
   },
   "scripts": {
-    "test": "mocha --require blanket --compilers coffee:coffee-script  --reporter spec test/*.coffee test/**/*.coffee",
+    "test": "grunt test",
     "start": "node app/server.js",
     "blanket": {
       "pattern": "/app/"

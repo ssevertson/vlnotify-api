@@ -33,10 +33,10 @@ module.exports.init = (done) ->
 
           self.storage.createBucket bucket, (err, data) ->
             self.storage.buckets[key] = data.Bucket if not err
-            if err then eachCallback(err) else eachCallback()
+            eachCallback(err)
 
       , (err, result) ->
-        if err then seriesCallback(err) else seriesCallback()
+        seriesCallback(err)
 
 
     (seriesCallback) ->
@@ -44,10 +44,10 @@ module.exports.init = (done) ->
         cor = cors[key]
 
         self.storage.putBucketCors cor, (err, data) ->
-          if err then eachCallback(err) else eachCallback()
+          eachCallback(err)
 
       , (err, result) ->
-        if err then seriesCallback(err) else seriesCallback()
+        seriesCallback(err)
 
 
     (seriesCallback) ->
@@ -64,12 +64,10 @@ module.exports.init = (done) ->
           distribution.DistributionConfig.CallerReference = new Date().getTime().toString()
           self.cdn.createDistribution distribution, (err, data) ->
             self.cdn.distributions[key] = data.Id if not err
-            if err then eachCallback(err) else eachCallback()
+            eachCallback(err)
 
       , (err, result) ->
-        if err then seriesCallback(err) else seriesCallback()
+        seriesCallback(err)
 
   ], (err, result) ->
-    if err then done(err) else done()
-
-# TODO: Generate compiled javascript/CSS/templates, and upload to CDN with version prefix
+    done(err)

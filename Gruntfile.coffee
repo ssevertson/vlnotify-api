@@ -28,6 +28,11 @@ module.exports = (grunt) ->
         dest: 'app/'
 
     mochacov:
+      coverage:
+        options:
+          coveralls:
+            serviceName: 'travis-ci'
+            repoToken: process.env.COVERALLS_REPO_TOKEN
       options:
         timeout: 10000
         ui: 'bdd'
