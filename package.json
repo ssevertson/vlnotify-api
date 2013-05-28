@@ -30,6 +30,7 @@
     "chai": "~1.6.0",
     "nodemon": "~0.7.8",
     "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.9",
     "grunt-contrib-coffee": "~0.7.0",
     "grunt-mocha-cov": "~0.0.7",
     "grunt-contrib-watch": "~0.4.0",
@@ -44,7 +45,7 @@
     "mocha-lcov-reporter": "0.0.1"
   },
   "scripts": {
-    "test": "grunt test",
+    "test": "./node_modules/grunt-cli/bin/grunt test",
     "start": "node app/server.js",
     "blanket": {
       "pattern": "/app/"
