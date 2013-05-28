@@ -45,7 +45,10 @@ app.use flatiron.plugins.http,
 app.use flatiron.plugins.resourceful
 resourceful.log = app.log
 
+app.router.param(':vlnid', /([._a-zA-Z0-9-:%]+)/)
+
 app.use restful,
+  param: ':vlnid'
   explore: true
   respond: (req, res, status, key, value) ->
     if arguments.length is 5
