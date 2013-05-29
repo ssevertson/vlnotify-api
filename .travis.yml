@@ -8,3 +8,9 @@ env:
       i1DAbG2jT/GUlKgJDnbVahceDlpHG50nUhyYlTo+p2gNCRLn5s2odkmd8dq3
       KEzD5WyUOs0e13Wvq4g8PO8vFRGF8sgbGBhJ6fwHzkmiu4rN2G0='
 script: "./node_modules/grunt-cli/bin/grunt ci"
+notifications:
+  webhooks: 
+    urls:
+      - http://webhooks.nodejitsu.com/1/deploy
+    on_success: always
+    on_failure: never

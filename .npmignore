@@ -1,0 +1,9 @@
+*.log
+*.pid
+
+node_modules
+test
+
+.project
+.settings
+.travis.yml
