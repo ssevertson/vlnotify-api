@@ -45,9 +45,9 @@
     "mocha-lcov-reporter": "0.0.1"
   },
   "scripts": {
-	  "blanket": {
-		  "pattern": "/app/"
-	  },
+    "blanket": {
+      "pattern": "/app/"
+    },
     "test": "./node_modules/grunt-cli/bin/grunt test",
     "start": "app/server.js",
     "predeploy": "./node_modules/grunt-cli/bin/grunt deploy"
