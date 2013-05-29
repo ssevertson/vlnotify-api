@@ -47,11 +47,18 @@ app.use flatiron.plugins.http,
       next()
   ]
 
+# Configure Resourceful here, so filters get configured correctly
+if process.env['NODE_ENV'] is 'production'
+  resourceful.use \
+    app.config.get('resourceful:production:engine'),
+    app.config.get('resourceful:production')
+else
+  resourceful.use \
+    app.config.get('resourceful:default:engine'),
+    app.config.get('resourceful:default')
 app.use flatiron.plugins.resourceful
-resourceful.log = app.log
 
 app.router.param(':vlnid', /([._a-zA-Z0-9-:%]+)/)
-
 app.use restful,
   param: ':vlnid'
   explore: true

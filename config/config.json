@@ -9,14 +9,19 @@
     "port": 8080
   },
   "resourceful": {
-    "engine": "Couchdb",
-    "host": "{app.name}.iriscouch.com",
-    "port": 443,
-    "database": "{app.name}",
-    "secure": true,
-    "auth": {
-      "username": "{app.name}-api",
-      "password": "***Password***"
+    "production": {
+      "engine": "Couchdb",
+      "host": "{app.name}.iriscouch.com",
+      "port": 443,
+      "database": "{app.name}",
+      "secure": true,
+      "auth": {
+        "username": "{app.name}-api",
+        "password": "***Password***"
+      }
+    },
+    "default": {
+      "engine": "Memory"
     }
   },
   "log": {

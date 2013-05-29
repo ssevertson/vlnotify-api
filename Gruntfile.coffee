@@ -2,6 +2,8 @@ module.exports = (grunt) ->
   grunt.initConfig
     pkg: '<json:package.json>'
 
+    clean: ['app/']
+
     coffee:
       options:
         sourceMap: true
@@ -65,16 +67,17 @@ module.exports = (grunt) ->
         options:
           logConcurrentOutput: true
 
-  grunt.loadNpmTasks 'grunt-mocha-cov'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-coffeelint'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
+  grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-mocha-cov'
+  grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-nodemon'
   grunt.loadNpmTasks 'grunt-concurrent'
-  grunt.loadNpmTasks 'grunt-contrib-copy'
   
-  grunt.registerTask 'deploy', ['coffee', 'copy']
-  grunt.registerTask 'compile', ['coffee', 'coffeelint', 'copy']
+  grunt.registerTask 'predeploy', ['clean', 'coffee', 'copy']
+  grunt.registerTask 'compile', ['clean', 'coffee', 'coffeelint', 'copy']
   grunt.registerTask 'test', ['compile', 'mochacov:test']
   grunt.registerTask 'ci', ['compile', 'mochacov:coverage']
   grunt.registerTask 'develop', ['concurrent']

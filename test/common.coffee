@@ -35,6 +35,3 @@ before ->
 
   sinon.stub(app.index, 'createIndex').callsArgWithAsync 2, null, {}
   sinon.stub(app.index, 'createDocuments').callsArgWithAsync 2, null, {}
-
-beforeEach ->
-  require('resourceful').use('Memory')

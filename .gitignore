@@ -3,5 +3,6 @@
 
 app
 node_modules
+
 .project
 .settings
