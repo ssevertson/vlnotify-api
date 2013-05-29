@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/ssevertson/vlnotify-api.png)](https://travis-ci.org/ssevertson/vlnotify-api)
+[![Coverage Status](https://coveralls.io/repos/ssevertson/vlnotify-api/badge.png?branch=master)](https://coveralls.io/r/ssevertson/vlnotify-api?branch=master)
+
 VLNotify-API
 ============
 
