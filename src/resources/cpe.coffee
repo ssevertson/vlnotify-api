@@ -94,8 +94,8 @@ CPE = module.exports = resourceful.define 'cpe', ->
       cpe.title_parsed
     else
       CPETitle.generateTitles wfn, cpe.title_hint
-    delete cpe.properties.title_hint
-    delete cpe.properties.title_parsed
+    delete cpe.properties.title_hint if cpe.properties
+    delete cpe.properties.title_parsed if cpe.properties
 
     ancestors = CPETitle.generateTitlesByAncestry wfn, titles
     cpe.title = ancestors.pop().title
@@ -134,7 +134,7 @@ CPE = module.exports = resourceful.define 'cpe', ->
               title: cpe.title
             }
           console.log.info('Updating parent %s', parentId)
-          timer = app.log.startTimer() if console.log.startTimer
+          timer = console.log.startTimer() if console.log.startTimer
           parentCpe.update updates, (err, parentCpe) ->
             timer.done('Updated parent ' + parentId) if timer
             if err then callback(err) else callback()
