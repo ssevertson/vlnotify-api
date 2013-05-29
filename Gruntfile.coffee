@@ -73,6 +73,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-concurrent'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   
+  grunt registerTask 'deploy', ['coffee', 'copy']
   grunt.registerTask 'compile', ['coffee', 'coffeelint', 'copy']
   grunt.registerTask 'test', ['compile', 'mochacov:test']
   grunt.registerTask 'ci', ['compile', 'mochacov:coverage']
