@@ -10,7 +10,7 @@ cors = require 'connect-xcors'
 jsonp = require 'connect-jsonp'
 domain = require 'domain'
 aws = require 'aws-sdk'
-renderDustStrings = require './util/render_dust_strings'
+dustRenderStrings = require 'dust-render-strings'
 
 app = module.exports = flatiron.app
 app.root = path.dirname __dirname
@@ -21,7 +21,7 @@ app.config
   .file(path.join app.root, 'config/config.json')
 
 # Support dust.js templates in config strings to reduce redundant values
-app.config.stores.literal.store = renderDustStrings(app.config.get())
+app.config.stores.literal.store = dustRenderStrings(app.config.get())
 
 
 # flatiron/broadway currently depend on Winston 0.6.2
