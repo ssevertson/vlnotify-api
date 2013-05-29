@@ -43,7 +43,6 @@ module.exports = (grunt) ->
           coveralls:
             serviceName: 'travis-ci'
             repoToken: process.env.COVERALLS_REPO_TOKEN
-        
 
     watch:
       files: [

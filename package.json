@@ -1,6 +1,6 @@
 {
   "description": "VLNotify API",
-  "version": "0.0.0-7",
+  "version": "0.0.0-8",
   "private": true,
   "dependencies": {
     "source-map-support": "~0.1.5",
@@ -22,7 +22,8 @@
     "connect-jsonp": "~0.0.5",
     "aws-sdk": "~1.1.0",
     "indexden": "~0.0.4",
-    "dustjs-linkedin": "~1.2.4"
+    "dustjs-linkedin": "~1.2.4",
+    "dust-render-strings": "~0.0.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
