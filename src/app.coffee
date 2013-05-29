@@ -27,6 +27,11 @@ app.config.stores.literal.store = renderDustStrings(app.config.get())
 # flatiron/broadway currently depend on Winston 0.6.2
 # We want 0.7.x for string interpolation
 app.use require './util/log.js'
+
+# Replace console.log with winston.info by default; augment with all other Winston methods
+console.log = app.log.info
+for key, val of app.log
+  console.log[key] = val
   
 app.use flatiron.plugins.http,
   before: [

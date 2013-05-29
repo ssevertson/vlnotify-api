@@ -27,7 +27,7 @@ module.exports.init = (done) ->
           
           for existing in data.Buckets
             if existing.Name is bucket.Bucket
-              self.storage.buckets[key] = existing.Bucket
+              self.storage.buckets[key] = existing.Name
               eachCallback()
               return
 

@@ -11,8 +11,14 @@ Helpers.authorize = (roles...) ->
       # Assume resource is being used directly (as support in a test); no authorization required
       callback()
       return
+      
     
-    {req, res} = process.domain
+    {req, res, role} = process.domain
+    if role and role in roles
+      # We've previously authenticated this request'
+      callback()
+      return
+    
     apiKey = req.headers[HEADER]
     if !apiKey
       callback
@@ -20,7 +26,7 @@ Helpers.authorize = (roles...) ->
         error: "Missing required header #{HEADER}"
       return
     
-    isUserResource = resource.resource is 'User'
+    isUserResource = resource.resource is 'User' or resource.id.indexOf('user/') is 0
     isApiKeyUser = resource.id is "user/#{apiKey}"
     
     if isUserResource and isApiKeyUser
@@ -30,8 +36,16 @@ Helpers.authorize = (roles...) ->
       return
     
     User = require '../resources/user'
+    console.log.info('Retrieving User: %s', apiKey.substring(0, 8) + '...')
+    timer = console.log.startTimer() if console.log.startTimer
     User.get apiKey, (err, user) ->
+      timer.done('Retrieved User: ' + apiKey.substring(0, 8) + '...')
       if user and user.role
+      
+        # Cache the user's role on the domain for the remainder of the request
+        # TODO: Consider caching user roles for longer (fixed size, LRU eviction?)
+        process.domain.role = user.role
+        
         if isUserResource && user.role is 'user'
           if isApiKeyUser
             callback()
@@ -45,8 +59,6 @@ Helpers.authorize = (roles...) ->
         statusCode: 401
         error: "Unauthorized"
 
-        
-
 
 Helpers.invalidate = (key) ->
   app = require '../../app/app'
@@ -55,6 +67,8 @@ Helpers.invalidate = (key) ->
 
     id = Helpers.prefixResourceId resource
 
+    console.log.info('Invalidating ' + id + ' in storage')
+    timer = app.log.startTimer()
     app.cdn.createInvalidation {
       DistributionId: distributionId
       InvalidationBatch:
@@ -65,15 +79,18 @@ Helpers.invalidate = (key) ->
           Quantity: 1
         CallerReference: new Date().getTime().toString()
     }, (err, data) ->
-      if err then callback(err) else callback()
+      timer.done('Invalidated ' + id + ' in storage')
+      callback(err)
+
 
 Helpers.upload = (key) ->
   app = require '../../app/app'
   return (err, resource, callback) ->
     bucketName = app.storage.buckets[key]
-
     id = Helpers.prefixResourceId resource
     
+    console.log.info('Uploading ' + id + ' to bucket ' + key)
+    timer = app.log.startTimer()
     app.storage.putObject {
       ACL: 'public-read'
       Body: JSON.stringify(resource)
@@ -83,19 +100,24 @@ Helpers.upload = (key) ->
       CacheControl: 'public'
       Expires: new Date().addHours(1)
     }, (err, data) ->
-      if err then callback(err) else callback()
+      timer.done('Upload ' + id + ' to bucket ' + key)
+      callback(err)
+
 
 Helpers.index = (key) ->
   app = require '../../app/app'
   return (err, resource, callback) ->
     indexName = app.index.indexes[key]
+    id = Helpers.prefixResourceId(resource)
 
+    console.log.info('Indexing ' + id)
+    timer = app.log.startTimer()
     app.index.createDocuments \
       indexName, \
       resource.buildIndexDocument(), \
       (err, data) ->
-      if err then callback(err) else callback()
-
+      timer.done('Indexed ' + id)
+      callback(err)
 
 
 Helpers.prefixResourceId = (resource) ->

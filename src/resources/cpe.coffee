@@ -12,7 +12,6 @@ CPE = module.exports = resourceful.define 'cpe', ->
   @key = 'id'
 
   util.mixin @schema, {
-    additionalProperties: false
     properties:
       id:
         type: 'string'
@@ -20,37 +19,8 @@ CPE = module.exports = resourceful.define 'cpe', ->
         pattern: /^[hoa](?::[\w-.~%]+){0,6}$/
       title:
         type: 'string'
-      title_hint:
-        type: 'string'
-      title_parsed:
-        type: 'object'
-        additionalProperties: false
-        properties:
-          part:
-            type: 'string'
-          vendor:
-            type: 'string'
-          product:
-            type: 'string'
-          version:
-            type: 'string'
-          update:
-            type: 'string'
-          edition:
-            type: 'string'
-          lang:
-            type: 'string'
-          sw_edition:
-            type: 'string'
-          target_sw:
-            type: 'string'
-          target_hw:
-            type: 'string'
-          other:
-            type: 'string'
       ancestors:
         type: 'array'
-        required: true
         items:
           type: 'object'
           additionalProperties: false
@@ -63,7 +33,6 @@ CPE = module.exports = resourceful.define 'cpe', ->
               type: 'string'
       children:
         type: 'array'
-        required: true
         items:
           type: 'object'
           additionalProperties: false
@@ -73,6 +42,36 @@ CPE = module.exports = resourceful.define 'cpe', ->
               required: true
               pattern: /^[hoa](?::[\w-.~%]+){0,6}$/
             title:
+              type: 'string'
+    additionalProperties:
+      properties:
+        title_hint:
+          type: 'string'
+        title_parsed:
+          type: 'object'
+          additionalProperties: false
+          properties:
+            part:
+              type: 'string'
+            vendor:
+              type: 'string'
+            product:
+              type: 'string'
+            version:
+              type: 'string'
+            update:
+              type: 'string'
+            edition:
+              type: 'string'
+            lang:
+              type: 'string'
+            sw_edition:
+              type: 'string'
+            target_sw:
+              type: 'string'
+            target_hw:
+              type: 'string'
+            other:
               type: 'string'
   }
 
@@ -95,8 +94,8 @@ CPE = module.exports = resourceful.define 'cpe', ->
       cpe.title_parsed
     else
       CPETitle.generateTitles wfn, cpe.title_hint
-    delete cpe.title_hint
-    delete cpe.title_parsed
+    delete cpe.properties.title_hint
+    delete cpe.properties.title_parsed
 
     ancestors = CPETitle.generateTitlesByAncestry wfn, titles
     cpe.title = ancestors.pop().title
@@ -107,6 +106,8 @@ CPE = module.exports = resourceful.define 'cpe', ->
       CPE.get parentId, (err, parentCpe) ->
         if err
           if err.status is 404
+            console.log.info('Creating parent %s', parentId)
+            timer = console.log.startTimer() if console.log.startTimer
             CPE.create  {
               id: parentId,
               title_parsed: titles
@@ -118,6 +119,7 @@ CPE = module.exports = resourceful.define 'cpe', ->
               ]
               ancestors: ancestors
             }, (err, parentCpe) ->
+              timer.done('Created parent ' + parentId) if timer
               if err then callback(err) else callback()
           else
             callback(err)
@@ -131,7 +133,10 @@ CPE = module.exports = resourceful.define 'cpe', ->
               id: cpeId
               title: cpe.title
             }
+          console.log.info('Updating parent %s', parentId)
+          timer = app.log.startTimer() if console.log.startTimer
           parentCpe.update updates, (err, parentCpe) ->
+            timer.done('Updated parent ' + parentId) if timer
             if err then callback(err) else callback()
     else
       callback()
