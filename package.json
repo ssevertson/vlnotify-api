@@ -54,6 +54,10 @@
   "name": "vlnotify-api",
   "author": "Scott Severtson",
   "homepage": "https://vlnotify.com/",
+  "subdomain": "vlnotify-api",
+  "engines": {
+    "node": "v0.10.x"
+  },
   "repository": {
     "type": "git",
     "url": "http://github.com/ssevertson/vlnotify-api.git"
