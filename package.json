@@ -56,7 +56,7 @@
   "homepage": "https://vlnotify.com/",
   "subdomain": "vlnotify-api",
   "engines": {
-    "node": "v0.10.x"
+    "node": "v0.8.x"
   },
   "repository": {
     "type": "git",
