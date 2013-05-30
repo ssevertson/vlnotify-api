@@ -36,10 +36,10 @@ Helpers.authorize = (roles...) ->
       return
     
     User = require '../resources/user'
-    console.log.info('Retrieving User: %s', apiKey.substring(0, 8) + '...')
-    timer = console.log.startTimer() if console.log.startTimer
+    console.log.info "Retrieving User: #{apiKey.substring(0, 8)}..."
+    timer = console.log.startTimer()
     User.get apiKey, (err, user) ->
-      timer.done('Retrieved User: ' + apiKey.substring(0, 8) + '...')
+      timer.done "Retrieved User: #{apiKey.substring(0, 8)}..."
       if user and user.role
       
         # Cache the user's role on the domain for the remainder of the request
@@ -67,7 +67,7 @@ Helpers.invalidate = (key) ->
 
     id = Helpers.prefixResourceId resource
 
-    console.log.info('Invalidating ' + id + ' in storage')
+    console.log.info "Invalidating #{id} in storage"
     timer = app.log.startTimer()
     app.cdn.createInvalidation {
       DistributionId: distributionId
@@ -79,8 +79,10 @@ Helpers.invalidate = (key) ->
           Quantity: 1
         CallerReference: new Date().getTime().toString()
     }, (err, data) ->
-      timer.done('Invalidated ' + id + ' in storage')
-      callback(err)
+      timer.done "Invalidated #{id} in storage"
+      console.log.error "Error in invalidation request: #{JSON.stringify(err)}" if err
+      # Don't pass error to callback - this isn't enough reason to fail the update
+      callback()
 
 
 Helpers.upload = (key) ->
@@ -89,7 +91,7 @@ Helpers.upload = (key) ->
     bucketName = app.storage.buckets[key]
     id = Helpers.prefixResourceId resource
     
-    console.log.info('Uploading ' + id + ' to bucket ' + key)
+    console.log.info "Uploading #{id} to bucket #{key}"
     timer = app.log.startTimer()
     app.storage.putObject {
       ACL: 'public-read'
@@ -100,7 +102,7 @@ Helpers.upload = (key) ->
       CacheControl: 'public'
       Expires: new Date().addHours(1)
     }, (err, data) ->
-      timer.done('Upload ' + id + ' to bucket ' + key)
+      timer.done "Uploaded #{id} to bucket #{key}"
       callback(err)
 
 
@@ -110,13 +112,13 @@ Helpers.index = (key) ->
     indexName = app.index.indexes[key]
     id = Helpers.prefixResourceId(resource)
 
-    console.log.info('Indexing ' + id)
+    console.log.info "Indexing #{id}"
     timer = app.log.startTimer()
     app.index.createDocuments \
       indexName, \
       resource.buildIndexDocument(), \
       (err, data) ->
-      timer.done('Indexed ' + id)
+      timer.done "Indexed #{id}"
       callback(err)
 
 

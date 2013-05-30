@@ -32,7 +32,7 @@ app.use require './util/log.js'
 console.log = app.log.info
 for key, val of app.log
   console.log[key] = val
-  
+
 app.use flatiron.plugins.http,
   before: [
     connect.compress()

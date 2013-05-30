@@ -74,7 +74,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-coffeelint'
   grunt.loadNpmTasks 'grunt-nodemon'
   grunt.loadNpmTasks 'grunt-concurrent'
-  
+
   grunt.registerTask 'predeploy', ['clean', 'coffee', 'copy']
   grunt.registerTask 'compile', ['clean', 'coffee', 'coffeelint', 'copy']
   grunt.registerTask 'test', ['compile', 'mochacov:test']

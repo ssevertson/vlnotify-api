@@ -78,6 +78,8 @@ CPE = module.exports = resourceful.define 'cpe', ->
   # Dynamic default values
   Object.defineProperty @schema.properties.children, 'default',
     get: -> []
+  Object.defineProperty @schema.properties.ancestors, 'default',
+    get: -> []
 
   @before 'create', helpers.authorize('admin')
   @before 'update', helpers.authorize('admin')
@@ -106,8 +108,8 @@ CPE = module.exports = resourceful.define 'cpe', ->
       CPE.get parentId, (err, parentCpe) ->
         if err
           if err.status is 404
-            console.log.info('Creating parent %s', parentId)
-            timer = console.log.startTimer() if console.log.startTimer
+            console.log.info "Creating parent #{parentId}"
+            timer = console.log.startTimer()
             CPE.create  {
               id: parentId,
               title_parsed: titles
@@ -119,7 +121,7 @@ CPE = module.exports = resourceful.define 'cpe', ->
               ]
               ancestors: ancestors
             }, (err, parentCpe) ->
-              timer.done('Created parent ' + parentId) if timer
+              timer.done "Created parent #{parentId}"
               if err then callback(err) else callback()
           else
             callback(err)
@@ -133,10 +135,10 @@ CPE = module.exports = resourceful.define 'cpe', ->
               id: cpeId
               title: cpe.title
             }
-          console.log.info('Updating parent %s', parentId)
-          timer = console.log.startTimer() if console.log.startTimer
+          console.log.info "Updating parent #{parentId}"
+          timer = console.log.startTimer()
           parentCpe.update updates, (err, parentCpe) ->
-            timer.done('Updated parent ' + parentId) if timer
+            timer.done "Updated parent  #{parentId}"
             if err then callback(err) else callback()
     else
       callback()
