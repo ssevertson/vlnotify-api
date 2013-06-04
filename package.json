@@ -37,7 +37,7 @@
     "grunt-nodemon": "0.0.3",
     "grunt-concurrent": "~0.2.0",
     "coffee-script": "~1.6.2",
-    "mocha": "~1.9.0",
+    "mocha": "~1.10.0",
     "mocha-lcov-reporter": "0.0.1",
     "chai": "~1.6.0",
     "sinon": "~1.7.2",

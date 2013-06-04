@@ -187,7 +187,7 @@ describe 'CPE', ->
               .to.eql(expectations[cpe.id])
           cpesDestroy cpes, done
 
-  it 'should index on create', (done) ->
+  xit 'should index on create', (done) ->
     app = require('../../app/app')
     
     app.index.createDocuments.reset()
