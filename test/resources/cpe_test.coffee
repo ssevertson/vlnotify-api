@@ -11,7 +11,6 @@ cpesDestroy = (cpes, callback) ->
 
 describe 'CPE', ->
 
-
   it 'should validate CPE format', ->
     cpe = new CPE id: ''
     expect(cpe.validate().valid)

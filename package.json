@@ -1,6 +1,6 @@
 {
   "description": "VLNotify API",
-  "version": "0.0.0-8",
+  "version": "0.0.0-34",
   "private": true,
   "dependencies": {
     "source-map-support": "~0.1.5",
@@ -12,7 +12,7 @@
     "inflect": "~0.3.0",
     "utile": "~0.2.0",
     "union": "~0.3.7",
-    "flatiron": "https://github.com/ssevertson/flatiron/tarball/master",
+    "flatiron": "https://github.com/flatiron/flatiron/tarball/master",
     "restful": "~0.4.4",
     "resourceful": "https://github.com/ssevertson/resourceful/tarball/master",
     "winston": "https://github.com/flatiron/winston/tarball/master",
@@ -22,7 +22,8 @@
     "connect-jsonp": "~0.0.5",
     "aws-sdk": "~1.1.0",
     "indexden": "~0.0.4",
-    "dust-render-strings": "~0.0.2"
+    "dust-render-strings": "~0.0.2",
+    "cpe-uri": "0.0.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

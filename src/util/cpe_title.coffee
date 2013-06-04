@@ -1,6 +1,6 @@
 util = require 'utile'
 inflect = require 'inflect'
-CPEURI = require './cpe_uri'
+cpe_uri = require 'cpe-uri'
 RegExp.quote = require 'regexp-quote'
 
 CPETitle = module.exports
@@ -15,7 +15,7 @@ prepareSegments = (wfn) ->
   segments = []
   lastSegment = null
 
-  CPEURI.forEach wfn, (componentName, value) ->
+  cpe_uri.forEach wfn, (componentName, value) ->
     clean = cleanSpecialChars(value)
     
     # If the first element of a multi-segment segment matches the previous segment, exclude it
@@ -131,7 +131,7 @@ titleCleanup = (segments) ->
 
 
 CPETitle.generateTitles = (wfn, title) ->
-  wfn = CPEURI.unbind wfn if wfn.part is undefined
+  wfn = cpe_uri.unbind wfn if wfn.part is undefined
   segments = prepareSegments(wfn)
   
   first = segments.shift()
@@ -174,15 +174,15 @@ CPETitle.generateTitles = (wfn, title) ->
   return segmentsToResults(segments)
 
 CPETitle.generateTitlesByAncestry = (wfn, titles) ->
-  wfn = CPEURI.unbind wfn if wfn.part is undefined
+  wfn = cpe_uri.unbind wfn if wfn.part is undefined
   titles = CPETitle.generateTitles(wfn, titles) if titles.part is undefined
   
   result = []
   wfnTemp = {}
-  CPEURI.forEach wfn, (componentName, value) ->
+  cpe_uri.forEach wfn, (componentName, value) ->
     wfnTemp[componentName] = value
     result.push {
-      id: CPEURI.bind wfnTemp
+      id: cpe_uri.bind wfnTemp
       title: titles[componentName]
     }
   return result

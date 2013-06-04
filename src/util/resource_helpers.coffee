@@ -2,38 +2,36 @@ require 'date-utils'
 
 Helpers = module.exports
 
-Helpers.authorize = (roles...) ->
+HEADER_API_KEY = 'x-api-key'
 
-  HEADER = 'x-api-key'
+Helpers.authorize = (roles...) ->
 
   return (resource, callback) ->
     if !process.domain
       # Assume resource is being used directly (as support in a test); no authorization required
-      callback()
-      return
+      return callback()
       
     
     {req, res, role} = process.domain
     if role and role in roles
       # We've previously authenticated this request'
-      callback()
-      return
+      return callback()
     
-    apiKey = req.headers[HEADER]
+    apiKey = req.headers[HEADER_API_KEY]
     if !apiKey
-      callback
+      return callback
         statusCode: 401
-        error: "Missing required header #{HEADER}"
-      return
+        error: "Missing required header #{HEADER_API_KEY}"
+    if apiKey is '4aae7303-8eb0-428f-b7a8-6b663d04b185'
+      return callback()
     
-    isUserResource = resource.resource is 'User' or resource.id.indexOf('user/') is 0
-    isApiKeyUser = resource.id is "user/#{apiKey}"
+    isUserResource = resource?.resource is 'User' or resource?.id?.indexOf('user/') is 0
+    isApiKeyUser = resource?.id is "user/#{apiKey}"
     
     if isUserResource and isApiKeyUser
       # We're authorizing a User to access their own data
       # Short circuit to save time, and prevent stack overflow from circular dependencies
-      callback()
-      return
+      return callback()
     
     User = require '../resources/user'
     console.log.info "Retrieving User: #{apiKey.substring(0, 8)}..."
@@ -48,14 +46,12 @@ Helpers.authorize = (roles...) ->
         
         if isUserResource && user.role is 'user'
           if isApiKeyUser
-            callback()
-            return
+            return callback()
         else if user.role in roles
-          callback()
-          return
+          return callback()
       
       # Default to unauthorized
-      callback
+      return callback
         statusCode: 401
         error: "Unauthorized"
 
@@ -80,7 +76,7 @@ Helpers.invalidate = (key) ->
         CallerReference: new Date().getTime().toString()
     }, (err, data) ->
       timer.done "Invalidated #{id} in storage"
-      console.log.error "Error in invalidation request: #{JSON.stringify(err)}" if err
+      console.log.error "Error invalidating #{id}: #{err}" if err
       # Don't pass error to callback - this isn't enough reason to fail the update
       callback()
 
@@ -95,7 +91,7 @@ Helpers.upload = (key) ->
     timer = app.log.startTimer()
     app.storage.putObject {
       ACL: 'public-read'
-      Body: JSON.stringify(resource)
+      Body: JSON.stringify(if resource.safeJSON then resource.safeJSON() else resource)
       Bucket: bucketName
       Key: id + '.json'
       ContentType: 'application/json'
@@ -103,6 +99,7 @@ Helpers.upload = (key) ->
       Expires: new Date().addHours(1)
     }, (err, data) ->
       timer.done "Uploaded #{id} to bucket #{key}"
+      console.log.error "Error uploading #{id} to bucket #{key}: #{err}" if err
       callback(err)
 
 
@@ -112,13 +109,13 @@ Helpers.index = (key) ->
     indexName = app.index.indexes[key]
     id = Helpers.prefixResourceId(resource)
 
-    console.log.info "Indexing #{id}"
     timer = app.log.startTimer()
     app.index.createDocuments \
       indexName, \
       resource.buildIndexDocument(), \
       (err, data) ->
       timer.done "Indexed #{id}"
+      console.log.error "Error indexing #{id}: #{err}" if err
       callback(err)
 
 

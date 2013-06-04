@@ -58,24 +58,35 @@ else
     app.config.get('resourceful:default')
 app.use flatiron.plugins.resourceful
 
-app.router.param(':vlnid', /([._a-zA-Z0-9-:%]+)/)
+app.router.param(':vlnid', /([_a-zA-Z0-9-~.%()'!:]+)/)
 app.use restful,
   param: ':vlnid'
   explore: true
-  respond: (req, res, status, key, value) ->
-    if arguments.length is 5
-      result = {}
-      result[key] = value
-    else
-      result = key
+  respond: (req, res, status) ->
+    switch arguments.length
+      when 3
+        # respond(req, res, 200)
+        result = {}
+      when 4
+        # respond(req, res, 500, err)
+        result = arguments[3]
+      when 5
+        # respond(req, res, 200, 'users', [{...}, {...}, ...])
+        result = {}
+        result[arguments[3]] = arguments[4]
 
-    if result.statusCode
+    if result?.statusCode
       status = result.statusCode
-
+      
     res.writeHead status, { 'Content-Type': 'application/json' }
     
     json = if result then JSON.stringify(result) else ''
-    app.log.info 'API Result: %d bytes', json.length
+    
+    if status >= 400
+      app.log.error 'API Error: %s %s: HTTP %d, %s', req.method, req.url, status, json
+    else
+      app.log.info 'API Result: %s %s: HTTP %d, %d bytes', req.method, req.url, status, json.length
+
     res.end json
 
 app.use require('./init/cdn')
