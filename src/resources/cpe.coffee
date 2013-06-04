@@ -17,7 +17,7 @@ CPE = module.exports = resourceful.define 'cpe', ->
       id:
         type: 'string'
         required: true
-        pattern: /^[hoa](?::[_a-zA-Z0-9-~.%()'!]*){0,6}$/
+        pattern: /^[hoa](?::[_a-zA-Z0-9-~.%()'!*]*){0,6}$/
       title:
         type: 'string'
       ancestors:
@@ -29,7 +29,7 @@ CPE = module.exports = resourceful.define 'cpe', ->
             id:
               type: 'string'
               required: true
-              pattern: /^[hoa](?::[_a-zA-Z0-9-~.%()'!]*){0,6}$/
+              pattern: /^[hoa](?::[_a-zA-Z0-9-~.%()'!*]*){0,6}$/
             title:
               type: 'string'
       children:
@@ -41,7 +41,7 @@ CPE = module.exports = resourceful.define 'cpe', ->
             id:
               type: 'string'
               required: true
-              pattern: /^[hoa](?::[_a-zA-Z0-9-~.%()'!]*){0,6}$/
+              pattern: /^[hoa](?::[_a-zA-Z0-9-~.%()'!*]*){0,6}$/
             title:
               type: 'string'
     additionalProperties:

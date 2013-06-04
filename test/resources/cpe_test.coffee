@@ -27,7 +27,7 @@ describe 'CPE', ->
     cpe = new CPE id: 'a:vendor:product:version:update:edition:lang:something'
     expect(cpe.validate().valid)
       .to.be.false
-    cpe = new CPE id: 'a:*'
+    cpe = new CPE id: 'a:<'
     expect(cpe.validate().valid)
       .to.be.false
     cpe = new CPE id: 'a:-'

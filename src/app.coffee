@@ -58,7 +58,7 @@ else
     app.config.get('resourceful:default')
 app.use flatiron.plugins.resourceful
 
-app.router.param(':vlnid', /([_a-zA-Z0-9-~.%()'!:]+)/)
+app.router.param(':vlnid', /([_a-zA-Z0-9-~.%()'!*:]+)/)
 app.use restful,
   param: ':vlnid'
   explore: true
