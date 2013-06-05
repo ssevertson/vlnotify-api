@@ -1,6 +1,6 @@
 {
   "description": "VLNotify API",
-  "version": "0.0.0-34",
+  "version": "0.0.0-35",
   "private": true,
   "dependencies": {
     "source-map-support": "~0.1.5",
@@ -23,7 +23,8 @@
     "aws-sdk": "~1.1.0",
     "indexden": "~0.0.4",
     "dust-render-strings": "~0.0.2",
-    "cpe-uri": "0.0.1"
+    "cpe-uri": "0.0.1",
+    "iron_worker": "~0.1.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

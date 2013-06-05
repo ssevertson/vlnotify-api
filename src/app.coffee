@@ -91,6 +91,7 @@ app.use restful,
 
 app.use require('./init/cdn')
 app.use require('./init/index')
+app.use require('./init/worker')
 
 unless Object.keys(app.router.routes).length
   app.log.error 'No routes set up!'
