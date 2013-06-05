@@ -56,4 +56,9 @@ User = module.exports = resourceful.define 'user', ->
   
   # Define stored filters (avoid temporary views)
   @filter 'all', {}
+  @filter 'subscription', map: (doc) ->
+    if doc.resource is 'User' and doc.subscription
+      for cpe in doc.subscription
+        emit cpe, doc
+  
   
