@@ -1,6 +1,6 @@
 {
   "description": "VLNotify API",
-  "version": "0.0.0-35",
+  "version": "0.0.0-36",
   "private": true,
   "dependencies": {
     "source-map-support": "~0.1.5",

@@ -28,6 +28,12 @@ User = module.exports = resourceful.define 'user', ->
         type: 'string'
         required: true
         format: 'date-time'
+      subscription:
+        type: 'array'
+        items:
+          type: 'string'
+          format: 'uri'
+        uniqueItems: true
     }
 
   # Dynamic default values
